@@ -1,4 +1,5 @@
 let validaRut = (rut) => {
+    console.log(rut)
     if (rut.length < 3){
         console.log('rutchico')
         return false;
@@ -62,8 +63,10 @@ let validaRut = (rut) => {
 
     console.log('comparar verificador',formatedRealVerifierCode, formattedVerifierCode)
     if(formatedRealVerifierCode === formattedVerifierCode){
+        console.log('rut correcto')
         return true;
     }else{
+        console.log('rut incorrecto')
         return false;
     }
 }
