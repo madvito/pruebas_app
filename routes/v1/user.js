@@ -16,7 +16,7 @@ router.get('/',(req,res)=>{
     })
 })
 
-router.post('/',(req,res)=>{
+router.post('/',async (req,res)=>{
     try{
         const {rut, nombre, apepat, apemat, email, password} = req.body;
         console.log(rut, nombre, apepat, apemat, email, password)
@@ -74,13 +74,16 @@ router.post('/',(req,res)=>{
             )
         }
         console.log('entro');
+
+        const hashedPassword = bcrypt.hashSync(password, 11);
+
         const userDoc = UserSchema({
             rut,
             nombre,
             apellidoPat: apepat,
             apellidoMat: apemat,
             email,
-            password
+            password: hashedPassword
         });
         userDoc.save();
         return res.status(201).json({

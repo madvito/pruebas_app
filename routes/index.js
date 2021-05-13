@@ -3,6 +3,6 @@ const routesV1 = require('./v1');
 
 const router = express.Router();
 
-router.use('/v1',routesV1);
+router.use('/api/v1',routesV1);
 
 module.exports = router;
