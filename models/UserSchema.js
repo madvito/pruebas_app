@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema({
     rut: {
         type: String,
         required: true,
+        unique: true
     },
     nombre: {
         type: String,
