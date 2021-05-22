@@ -4,7 +4,7 @@ const router = require('./routes');
 require('dotenv').config();
 
 console.log('NODE_ENV',process.env.NODE_ENV);
-
+// set env
 if (process.env.NODE_ENV === 'development'){
     require('dotenv').config({path: `${__dirname}/.env.dev`});
 }else if (process.env.NODE_ENV === 'production'){
@@ -22,7 +22,8 @@ app.use(router);
 
 const SERVER_PORT = process.env.SERVER_PORT;
 
-mongoose.connect('mongodb://localhost:27017/pruebas_app', 
+// mongoose.connect('mongodb://localhost:27017/pruebas_app',
+mongoose.connect(process.env.DB_URL,
 {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
