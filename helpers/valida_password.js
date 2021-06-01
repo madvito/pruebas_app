@@ -3,7 +3,7 @@ const validaPassword = (password) => {
         console.log('pass corto')
         return false;
     }else{
-        if (!/[a-zA-Z0-9@\.\*]/.test(password)){
+        if (!/[a-zA-Z0-9@\.\*]/g.test(password)){
             console.log('formato pass incorrecto')
             return false;
         }else{

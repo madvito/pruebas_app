@@ -10,9 +10,11 @@ const isAuth = (req, res, next) => {
     }catch(e){
         console.log(e);
         //TODO: MODIFICAR CUANDO HAGA HANDLER HANDLER
-        return res.status(401).json({
-            error: e
-        })
+        // return res.status(401).json({
+        //     error: e
+        // })
+        e.statusCode = 401;
+        next(err)
     }
 }
 
@@ -25,7 +27,8 @@ const isAdmin = (req, res, next) => {
         const err = new Error('Rol no válido');
         //TODO: MODIFICAR CUANDO HAGA HANDLER HANDLER
         err.statusCode = 401;
-        return res.status(401).json(err);
+        // return res.status(401).json(err);
+        next(err);
     }
 }
 

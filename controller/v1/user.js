@@ -3,9 +3,9 @@ const validaNombre = require("../../helpers/valida-nombre");
 const validaEmail = require("../../helpers/valida_email");
 const validaPassword = require("../../helpers/valida_password");
 const validaRut = require("../../helpers/valida_rut");
-const UserSchema = require("../../models/UserSchema");
+const UserModel = require("../../models/UserModel");
 
-const registraUsuario = async (req,res)=>{
+const registraUsuario = async (req, res, next)=>{
     try{
         const {rut, nombre, apepat, apemat, email, password} = req.body;
         console.log(rut, nombre, apepat, apemat, email, password)
@@ -62,10 +62,9 @@ const registraUsuario = async (req,res)=>{
             )
         }
         console.log('entro');
-
-        const hashedPassword = bcrypt.hashSync(password, 11);
-
-        const userDoc = UserSchema({
+        const hashedPassword = bcrypt.hashSync(password,parseInt(process.env.PASSWORD_SALT));
+        console.log('pass lista')
+        const userDoc = UserModel({
             rut,
             nombre,
             apellidoPat: apepat,
@@ -73,14 +72,18 @@ const registraUsuario = async (req,res)=>{
             email,
             password: hashedPassword
         });
-        userDoc.save();
+        const savedUser = await userDoc.save();
+        console.log('savedUser',savedUser)
+        
         return res.status(201).json({
             msj: 'Usuario creado',
             data: userDoc
         })
                             
     }catch(e){
-        res.status(500).json(e);
+        // res.status(500).json(e);
+        e.statusCode = 500;
+        next(e)
     }
 }
 module.exports = {
