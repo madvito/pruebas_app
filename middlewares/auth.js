@@ -19,7 +19,7 @@ const isAuth = (req, res, next) => {
 }
 
 const isAdmin = (req, res, next) => {
-    const usuario = req.user;
+    const user = req.user;
 
     if (user.role === 'admin_role'){
         next();

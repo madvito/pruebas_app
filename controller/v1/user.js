@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const validaNombre = require("../../helpers/valida-nombre");
 const validaEmail = require("../../helpers/valida_email");
 const validaPassword = require("../../helpers/valida_password");
@@ -86,6 +87,37 @@ const registraUsuario = async (req, res, next)=>{
         next(e)
     }
 }
+
+const login = async (req, res, next) => {
+    try{
+        const {email, password} = req.body;
+        console.log('email:',email, 'password:', password);
+        const userDoc = await UserModel.findOne({email:email});
+        console.log(userDoc)
+        if (!userDoc){
+            const err = new Error('Acceso denegado.');
+            err.statusCode = 401;
+            return next (err);
+        }else if (!bcrypt.compareSync(password, userDoc.password)){
+            const err = new Error('Usuario o password incorrecto.');
+            err.statusCode = 401;
+            return next (err);
+        }
+
+        const token = jwt.sign({user: userDoc.nombre, role: userDoc.role},process.env.TOKEN_SECRET,{expiresIn: '1h'});
+
+        return res.status(200).json({
+            user: userDoc.nombre,
+            role: userDoc.role,
+            token
+        })
+    }catch(e){
+        e.statuscode = 500;
+        next(e);
+    }
+    
+}
 module.exports = {
-    registraUsuario
+    registraUsuario,
+    login
 }
