@@ -18,10 +18,10 @@ const isAuth = (req, res, next) => {
     }
 }
 
-const isAdmin = (req, res, next) => {
+const isTeacher = (req, res, next) => {
     const user = req.user;
 
-    if (user.role === 'admin_role'){
+    if (user.role === 'teacher_role'){
         next();
     }else{
         const err = new Error('Rol no válido');
@@ -34,5 +34,5 @@ const isAdmin = (req, res, next) => {
 
 module.exports = {
     isAuth,
-    isAdmin,
+    isTeacher,
 }

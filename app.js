@@ -1,17 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const router = require('./routes');
 
 // set env
 require('dotenv').config({path: `${__dirname}/.env.${process.env.NODE_ENV}`});
 console.log('NODE_ENV',process.env.NODE_ENV);
 
+//express
 const app = express();
 app.use(express.json());
 
+//cors
+app.use(cors());
+
+//rutas
 app.use(router);
 
-//ERROR HANDLER
+//error handler
 app.use((err,req,res,next)=>{
     console.log('handler', err);
 

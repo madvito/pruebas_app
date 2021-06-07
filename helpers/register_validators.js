@@ -1,3 +1,48 @@
+const validaEmail = (email) => {
+    if (email.length < 7){
+        console.log('email corto')
+        return false;
+    }else{
+        if(!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$/.test(email)){
+            console.log('email formato incorrecto')
+            return false;
+        }else{
+            console.log('email formato correcto')
+            return true;
+        }
+    }
+}
+
+const validaPassword = (password) => {
+    if (password.length < 6){
+        console.log('pass corto')
+        return false;
+    }else{
+        if (!/[a-zA-Z0-9@\.\*]/g.test(password)){
+            console.log('formato pass incorrecto')
+            return false;
+        }else{
+            console.log('formato pass correcto')
+            return true;
+        }
+    }
+}
+
+const validaNombre = (nombre) =>{
+    if (nombre.length < 2){
+        console.log('nombre corto')
+        return false;
+    }else{
+        // if (!/^[a-zA-Z" "]+$/.test(nombre)){
+        if (!/^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/g.test(nombre)){
+            console.log('nombre formato incorrecto')
+            return false;
+        }
+        console.log('nombre formato correcto')
+        return true;
+    }
+}
+
 const validaRut = (rut) => {
     console.log('validarut',rut)
     if (rut.length < 3){
@@ -81,4 +126,9 @@ const validaRut = (rut) => {
     
 }
 
-module.exports = validaRut;
+module.exports = {
+    validaEmail,
+    validaNombre,
+    validaPassword,
+    validaRut
+}

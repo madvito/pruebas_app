@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const UserSchema = new mongoose.Schema({
     rut: {
         type: String,
@@ -20,7 +21,8 @@ const UserSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -28,8 +30,17 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: 'student_role'
+        default: 'student_role',
+    },
+    school_year:{
+        type: [Number],
+        required: true
+    },
+    grade:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Grade'
     }
+
 })
 
-module.exports = mongoose.model( 'UserModel', UserSchema);
+module.exports = mongoose.model( 'User', UserSchema);

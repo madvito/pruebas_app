@@ -1,9 +1,23 @@
-const GradeModel = require('../../models/GradeModel');
+const GradeModel = require('../../models/grade_model');
 
-const postGrade = async(req, res, next) =>{
+const addGrade = async(req, res, next) =>{
+    const {gradeName, schoolYear} = req.body;
+
+    if (!gradeName){
+        const err = new Error('Ingresar nombre del curso');
+        err.statusCode = 400;
+        throw err;
+    }
+
+    if (!schoolYear){
+        const err = new Error('Ingresar nivel escolar');
+        err.statusCode = 400;
+        throw err;
+    }
+
     const gradeDoc = new GradeModel({
-        grade_name: '1° Basico A',
-        school_year: 1
+        grade_name: gradeName,
+        school_year: schoolYear
     });
     try{
         newGrade = await gradeDoc.save();
@@ -14,11 +28,13 @@ const postGrade = async(req, res, next) =>{
         })
     }catch (e){
         console.log(e);
-        e.statusCode = 500;
+        if (!e.statusCode){
+            e.statusCode = 500;
+        }
         next(e);
     }
 }
 
 module.exports = {
-    postGrade
+    addGrade
 }
