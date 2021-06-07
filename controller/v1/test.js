@@ -2,7 +2,7 @@ const TestModel = require('../../models/test_model');
 
 const createTest = async (req, res, next) =>{
     try {
-        const {questions} = req.body;
+        const {questions, subject, grade} = req.body;
         let totalPoints = 0;
         let formatData = {questions: []};
         const questionError = {};
@@ -59,6 +59,8 @@ const createTest = async (req, res, next) =>{
             throw err;
         }
 
+        formatData.subject = subject;
+        formatData.grade = grade;
         formatData.max_points = totalPoints;
         const testDoc = TestModel( formatData);
         const savedTest = await testDoc.save();

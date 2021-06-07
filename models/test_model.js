@@ -26,23 +26,24 @@ const subjectValidator = async (subjectId) => {
 }
 
 const TestSchema = new mongoose.Schema({
-    // grade: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     // ref: GradeModel,
-    //     required: true,
-    //     validate: {
-    //         validator: gradeValidator,
-    //         message: 'Curso no existe'
-    //     }
-    // },
-    // subject: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     required: true,
-    //     validate: {
-    //         validator: subjectValidator,
-    //         message: 'Asignatura no existe'
-    //     }
-    // },
+    grade: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: GradeModel,
+        validate: {
+            validator: gradeValidator,
+            message: 'Curso no existe'
+        }
+    },
+    subject: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Subject',
+        validate: {
+            validator: subjectValidator,
+            message: 'Asignatura no existe'
+        }
+    },
     // created_by: {
     //     type: mongoose.Schema.Types.ObjectId,
     //     required: true,
@@ -53,10 +54,6 @@ const TestSchema = new mongoose.Schema({
     // },
     questions: [
         {
-            // question_type: {
-            //     type: Number,
-            //     required: true,
-            // },
             points: {
                 type: Number,
                 required: true

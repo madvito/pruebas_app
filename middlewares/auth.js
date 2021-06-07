@@ -9,12 +9,8 @@ const isAuth = (req, res, next) => {
         next();
     }catch(e){
         console.log(e);
-        //TODO: MODIFICAR CUANDO HAGA HANDLER HANDLER
-        // return res.status(401).json({
-        //     error: e
-        // })
         e.statusCode = 401;
-        next(err)
+        next(e)
     }
 }
 
@@ -25,9 +21,7 @@ const isTeacher = (req, res, next) => {
         next();
     }else{
         const err = new Error('Rol no válido');
-        //TODO: MODIFICAR CUANDO HAGA HANDLER HANDLER
         err.statusCode = 401;
-        // return res.status(401).json(err);
         next(err);
     }
 }
