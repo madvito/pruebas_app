@@ -1,6 +1,7 @@
 const TestModel = require('../../models/test_model');
 const GradeModel = require('../../models/grade_model');
 const SubjectModel = require('../../models/subject_model');
+const AnsweredTestModel = require('../../models/answered_test_model');
 
 const createTest = async (req, res, next) =>{
     try {
@@ -99,7 +100,7 @@ const createTest = async (req, res, next) =>{
 
         res.status(201).json({
             data: savedTest,
-            totalPoints
+            message: 'Prueba se creo correctamente'
         })
       
     } catch (e) {
@@ -112,11 +113,68 @@ const createTest = async (req, res, next) =>{
     
 }
 
-const applyTest = (req,res,next) => {
-    console.log('applyTest');
-    res.status(200).json({
-        data: 'apply test'
-    })
+const applyTest = async(req,res,next) => {
+    try {
+        const {studentId, studentGrade} = req.student;
+        const {testId} = req.params;
+
+        const testDoc = await TestModel.findById(testId);
+        if (!testDoc){
+            const err = new Error('La prueba no existe');
+            err.statusCode = 400;
+            throw err;
+        }
+        if (studentGrade.toString() != testDoc.grade.toString()){
+            console.log('studentGrade',studentGrade);
+            console.log('testDoc.grade',testDoc.grade);
+            const err = new Error('El estudiante no tiene permiso para hacer esta prueba');
+            err.statusCode = 401;
+            throw err;
+        }
+
+        const {answers} = req.body;
+        const {questions} = testDoc;
+
+        if (answers.length != questions.length){
+            const err = new Error('La cantidad de respuestas no corresponde a esta prueba');
+            err.statusCode = 400;
+            throw err;
+        }
+
+        if (answers.some(isNaN)){
+            const err = new Error('Hay respuestas con formato equivocado');
+            err.statusCode = 400;
+            throw err;
+        }
+
+        let points = 0;
+
+        questions.map((question, index) => {
+            if (question.correct_answer == answers[index]){
+                points += question.points;
+            }
+        })
+
+        const answeredTest = {
+            test_id: testId,
+            student_id: studentId,
+            answers,
+            score: points,
+            approvalPercentage: (parseFloat(points)/parseFloat(testDoc.max_points))*100
+        }
+
+        const answeredTestDoc = await AnsweredTestModel(answeredTest).save();
+
+        res.status(200).json({
+            data: answeredTestDoc,
+            message: "Prueba respondida fue ingresada con exito"
+        })
+    } catch (e) {
+        if (!e.statusCode){
+            e.statusCode = 500;
+        }
+        next(e);
+    }
 }
 
 module.exports = {

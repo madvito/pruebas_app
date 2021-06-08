@@ -64,7 +64,6 @@ const isStudent = async (req, res, next) => {
             }
             req.student = {
                 studentId: studentDoc._id,
-                studentSchoolYear: Math.max(...studentDoc.school_year),
                 studentGrade: studentDoc.grade
             }
 

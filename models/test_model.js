@@ -34,6 +34,7 @@ const TestSchema = new mongoose.Schema({
     },
     created_by: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "Teacher",
         required: true,
         validate: {
             validator: teacherValidator,

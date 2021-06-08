@@ -1,6 +1,7 @@
 const GradeModel = require('../../models/grade_model');
 
 const addGrade = async(req, res, next) =>{
+    try{
     const {gradeName, schoolYear} = req.body;
 
     if (!gradeName){
@@ -14,16 +15,21 @@ const addGrade = async(req, res, next) =>{
         err.statusCode = 400;
         throw err;
     }
+    if (isNaN(schoolYear)){
+        const err = new Error('Nivel escolar debe ser un número');
+        err.statusCode = 400;
+        throw err;
+    }
 
     const gradeDoc = new GradeModel({
         grade_name: gradeName,
         school_year: schoolYear
     });
-    try{
+    
         newGrade = await gradeDoc.save();
         console.log('newGrade',newGrade)
         return res.status(201).json({
-            message: 'New grade Added',
+            message: 'Nuevo curso registrado',
             data: newGrade
         })
     }catch (e){

@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post('/',isAuth, isTeacher, createTest);
 
-router.post('/apply',isAuth, isStudent,applyTest);
+router.post('/apply/:testId',isAuth, isStudent,applyTest);
 
 module.exports = router;

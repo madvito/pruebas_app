@@ -82,8 +82,6 @@ const addTeacher = async (req, res, next) => {
         }
         
 
-    
-       
         const userDoc = UserModel(dataToSave);
         const savedUser = await userDoc.save();
         console.log('savedUser',savedUser)
@@ -91,21 +89,7 @@ const addTeacher = async (req, res, next) => {
         let teacherInfo = {
             userId: savedUser._id,
         }
-        //subject, school_year
-        // if (subject){
-        //     const subjectDoc = await SubjectModel.exists({_id: subject});
-        //     if(subjectDoc){
-        //         teachersInfo.subject = [subject];
-        //     }
-            
-        // }
-        // if (schoolYear){
-        //     const gradeDoc = await GradeModel.exists({school_year: schoolYear});
-        //     if(gradeDoc){
-        //         teachersInfo.school_year = [schoolYear];
-        //     }
-            
-        // }
+        
         try {
             const teacherDoc = TeacherModel(teacherInfo);
             const savedTeacher = await teacherDoc.save();
@@ -120,7 +104,7 @@ const addTeacher = async (req, res, next) => {
             }
             
             return res.status(201).json({
-                msj: 'Profesor creado',
+                msj: 'Profesor registrado correctamente',
                 data: savedTeacher
             })
         } catch (e) {
@@ -130,27 +114,8 @@ const addTeacher = async (req, res, next) => {
             e.statusCode = 500;
             throw e;
         }
-        // const teacherDoc = TeacherModel(teacherInfo);
-        // savedTeacher = teacherDoc.save();
-
-
-
-        // const payload = {
-        //     rut: userDoc.rut,
-        //     nombre: userDoc.nombre,
-        //     apellidoPat: userDoc.apellidoPat,
-        //     apellidoMat: userDoc.apellidoMat,
-        //     email: userDoc.email,
-        //     role: userDoc.role
-        // }
         
-        // return res.status(201).json({
-        //     msj: 'Usuario creado',
-        //     data: payload
-        // })
-                            
     }catch(e){
-        // res.status(500).json(e);
         if (!e.statusCode){
             e.statusCode = 500;
         }

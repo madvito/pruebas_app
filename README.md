@@ -3,6 +3,9 @@
 ## Proyecto: Aplicación de creación y aplicación de pruebas/examenes
 ## Por Víctor Madrid
 
+### Documentación
+https://documenter.getpostman.com/view/8323527/TzY7cDA5
+
 ## Pasos para ejecutar
 ### 1 paso: Descargar aplicación.
 Descargar el proyecto y luego npm install.
@@ -14,13 +17,13 @@ Según se necesite, para development : npm run dev, o production : npm run start
 En el endpoint http://localhost:8000/api/v1/admin/teacher con metodo POST se pueden crear profesores con el objeto JSON siguiente:
 ```
 {
-    "securityCode": "profe",
-    "rut" : "7995352-0",
-    "nombre": "Javier",
-    "apepat": "Perez",
-    "apemat": "Torres",
-    "email": "profe1@test.com",
-    "password": "prueb@"
+    "securityCode": "M45T3R",
+    "rut" : "5997840-3",
+    "nombre": "Profe uno",
+    "apepat": "Vasquez",
+    "apemat": "Perez",
+    "email": "profe1@gmail.com",
+    "password": "@sdfasdf"
 }
 ```
 preocupandose de ocupar rut válido chileno, password alfanumerica que puede incluir los signos "@","*" y ".", securityCode que para entorno de development es "profe" y en producción es "M45T3R".
@@ -40,8 +43,8 @@ Ruta protegida, solo con acceso para profesores.
 En el endpoint http://localhost:8000/api/v1/admin/grade con metodo POST se pueden crear cursos con el objeto JSON siguiente:
 ```
 {
-    "gradeName": "2° Basico A",
-    "schoolYear": 2
+    "gradeName": "1° Basico A",
+    "schoolYear": 1
 }
 ```
 donde "gradeName" es el nombre del curso específico y "schoolYear" es el nivel del curso (2 siendo segundo año de escuela básica)
@@ -81,8 +84,8 @@ Ruta protegida, solo con acceso para profesores.
 En el endpoint http://localhost:8000/api/v1/test/ con metodo POST se pueden crear pruebas con el objeto JSON siguiente:
 ```
 {
-    "grade": "60bdaa8e6ec7754e28028cae",
-    "subject":"60bdba772cd2222004ba1e24",
+    "grade": "60bf192bab6632232cd04db6",
+    "subject":"60bf16b6eb8dd619741a728b",
     "questions": [
         {
             "points": 2,
@@ -102,13 +105,12 @@ En el endpoint http://localhost:8000/api/v1/test/ con metodo POST se pueden crea
 en el arreglo "questions" puede ir cualquier cantidad de preguntas, las respuestas deben ser al menos 2 y la respuesta correcta debe ser menor al largo del arreglo de posibles respuestas.
 
 ### 9 paso: Responder la prueba.
-Ruta protegida, con acceso para estudiantes y profesores.
+Ruta protegida, con acceso para estudiantes.
 
-En el endpoint http://localhost:8000/api/v1/test/:idTest con metodo POST se pueden responder pruebas con el objeto JSON siguiente:
+En el endpoint http://localhost:8000/api/v1/test/apply/:idTest con metodo POST se pueden responder pruebas con el objeto JSON siguiente:
 ```
 {
-    "userId": "60bdaa8e6ec7754e28028cae",
     "answers": [3,3,1,4]
 }
 ```
-que se guardará con el id de la cuenta que este relacionada al token de Authorization.
+que validará que el alumno sea del curso al que se diseñó la prueba y la guardará con el id de la cuenta de estudiante que esté relacionada al token de Authorization.

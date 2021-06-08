@@ -11,7 +11,6 @@ const GradeModel = require("../../models/grade_model");
 const registraUsuario = async (req, res, next)=>{
     try{
         const {rut, nombre, apepat, apemat, email, password, grade} = req.body;
-        // console.log(rut, nombre, apepat, apemat, email, password)
 
         if(!validaRut(rut)){
             console.log('err validarut');
@@ -90,10 +89,6 @@ const registraUsuario = async (req, res, next)=>{
             school_year: [school_year],
             grade: grade
         }
-        // console.log('role', role);
-        // if (role){
-        //     dataToSave.role = role;
-        // }
 
         const userDoc = UserModel(dataToSave);
         const savedUser = await userDoc.save();
@@ -110,12 +105,11 @@ const registraUsuario = async (req, res, next)=>{
         }
         
         return res.status(201).json({
-            msj: 'Usuario creado',
+            message: 'Usuario creado correctamente',
             data: payload
         })
                             
     }catch(e){
-        // res.status(500).json(e);
         if (!e.statusCode){
             e.statusCode = 500;
         }
@@ -126,6 +120,11 @@ const registraUsuario = async (req, res, next)=>{
 const login = async (req, res, next) => {
     try{
         const {email, password} = req.body;
+        if (!email || !password){
+            const err = new Error('Ingresar email y password');
+            err.statusCode = 400;
+            throw err;
+        }
         console.log('email:',email, 'password:', password);
         const userDoc = await UserModel.findOne({email:email});
         console.log(userDoc)
@@ -148,7 +147,9 @@ const login = async (req, res, next) => {
             token
         })
     }catch(e){
-        e.statuscode = 500;
+        if (!e.statusCode){
+            e.statuscode = 500;
+        }
         next(e);
     }
     

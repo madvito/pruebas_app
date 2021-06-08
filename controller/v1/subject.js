@@ -7,6 +7,7 @@ const addSubject = async(req, res, next) => {
         if (!subjectName){
             const err = new Error('Ingresar nombre de la asignatura');
             err.statusCode = 400;
+            throw err;
         }
         const subjectDoc = SubjectModel({
             subject_name: subjectName
@@ -15,6 +16,7 @@ const addSubject = async(req, res, next) => {
         console.log(savedSubject);
 
         res.status(201).json({
+            message: 'Nueva asignatura registrada',
             data: savedSubject
         })
 
