@@ -6,17 +6,16 @@ const jwt = require('jsonwebtoken');
 // const validaRut = require("../../helpers/valida_rut");
 const {validaNombre,validaEmail,validaPassword,validaRut} = require("../../helpers/register_validators");
 const UserModel = require("../../models/user_model");
+const GradeModel = require("../../models/grade_model");
 
 const registraUsuario = async (req, res, next)=>{
     try{
-        const {rut, nombre, apepat, apemat, email, password, role} = req.body;
+        const {rut, nombre, apepat, apemat, email, password, grade} = req.body;
         // console.log(rut, nombre, apepat, apemat, email, password)
 
         if(!validaRut(rut)){
             console.log('err validarut');
-            // return res.status(400).json({
-            //     msj: 'Rut invalido'
-            // });
+
             const err = new Error('Rut invalido');
             err.statusCode = 400;
             throw(err);
@@ -24,11 +23,7 @@ const registraUsuario = async (req, res, next)=>{
         console.log('rut validado')
         if (!validaNombre(nombre)){
             console.log('err validanombre');
-            // return res.status(400).json(
-            //     {
-            //         msj: 'Nombre invalido'
-            //     }
-            // )
+
             const err = new Error('Nombre invalido');
             err.statusCode = 400;
             throw(err);
@@ -36,11 +31,7 @@ const registraUsuario = async (req, res, next)=>{
         console.log('nombre validado')
         if (!validaNombre(apepat)){
             console.log('err validaapepat');
-            // return res.status(400).json(
-            //     {
-            //         msj: 'Apellido paterno invalido'
-            //     }
-            // )
+
             const err = new Error('Apellido paterno invalido');
             err.statusCode = 400;
             throw(err);
@@ -48,11 +39,7 @@ const registraUsuario = async (req, res, next)=>{
         console.log('apepat validado')
         if (!validaNombre(apemat)){
             console.log('err validaapemat');
-            // return res.status(400).json(
-            //     {
-            //         msj: 'Apellido materno invalido'
-            //     }
-            // )
+
             const err = new Error('Apellido materno invalido');
             err.statusCode = 400;
             throw(err);
@@ -60,11 +47,7 @@ const registraUsuario = async (req, res, next)=>{
         console.log('apemat validado')
         if(!validaEmail(email)){
             console.log('err validaemail');
-            // return res.status(400).json(
-            //     {
-            //         msj: 'Email invalido'
-            //     }
-            // )
+
             const err = new Error('Email invalido');
             err.statusCode = 400;
             throw(err);
@@ -72,15 +55,27 @@ const registraUsuario = async (req, res, next)=>{
         console.log('email validado')
         if (!validaPassword(password)){
             console.log('err validapassword');
-            // return res.status(400).json(
-            //     {
-            //         msj: 'Password invalido'
-            //     }
-            // )
+
             const err = new Error('Password invalido');
             err.statusCode = 400;
             throw(err);
         }
+        if(!grade){
+            console.log('err curso');
+            const err = new Error('Ingresar curso');
+            err.statusCode = 400;
+            throw err;
+        }
+
+        const gradeDoc = await GradeModel.findById(grade);
+        if (!gradeDoc){
+            console.log('err curso');
+            const err = new Error('El curso no existe');
+            err.statusCode = 400;
+            throw err;
+        }
+        const {school_year} = gradeDoc;
+
         console.log('entro');
         const hashedPassword = bcrypt.hashSync(password,parseInt(process.env.PASSWORD_SALT));
         console.log('pass lista');
@@ -91,23 +86,27 @@ const registraUsuario = async (req, res, next)=>{
             apellidoPat: apepat,
             apellidoMat: apemat,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            school_year: [school_year],
+            grade: grade
         }
-        console.log('role', role);
-        if (role){
-            dataToSave.role = role;
-        }
+        // console.log('role', role);
+        // if (role){
+        //     dataToSave.role = role;
+        // }
 
         const userDoc = UserModel(dataToSave);
         const savedUser = await userDoc.save();
         console.log('savedUser',savedUser)
         const payload = {
-            rut: userDoc.rut,
-            nombre: userDoc.nombre,
-            apellidoPat: userDoc.apellidoPat,
-            apellidoMat: userDoc.apellidoMat,
-            email: userDoc.email,
-            role: userDoc.role
+            rut: savedUser.rut,
+            nombre: savedUser.nombre,
+            apellidoPat: savedUser.apellidoPat,
+            apellidoMat: savedUser.apellidoMat,
+            email: savedUser.email,
+            role: savedUser.role,
+            school_year: savedUser.school_year,
+            grade: grade
         }
         
         return res.status(201).json({

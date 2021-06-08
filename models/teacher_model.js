@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const GradeModel = require('../models/grade_model');
 
-// const yearValidator = async(year) => {
-//     if (!year){
-//         return true;
-//     }
-//     const resp = await GradeModel.exists({school_year: year});
-//     return resp;
-// }
+const yearValidator = async(year) => {
+    if (!year){
+        return true;
+    }
+    const resp = await GradeModel.exists({school_year: year});
+    return resp;
+}
 const TeacherSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -17,18 +17,12 @@ const TeacherSchema = new mongoose.Schema({
     subject: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Subject',
-        // default: []
+  
     },
-    // school_year:
-    //     {
-    //         type: [Number],
-    //         required: true,
-    //         // default: [],
-    //         // validate: {
-    //         //     validator: yearValidator,
-    //         //     message: 'Nivel escolar no existe'
-    //         // }
-    //     }
+    school_year:
+        {
+            type: [Number]
+        }
     
 
 })

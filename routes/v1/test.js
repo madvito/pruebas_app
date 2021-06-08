@@ -1,11 +1,11 @@
 const express = require('express');
 const { createTest, applyTest } = require('../../controller/v1/test');
-const { isAuth } = require('../../middlewares/auth');
+const { isAuth, isStudent, isTeacher } = require('../../middlewares/auth');
 
 const router = express.Router();
 
-router.post('/',isAuth, createTest);
+router.post('/',isAuth, isTeacher, createTest);
 
-router.post('/apply',isAuth, applyTest);
+router.post('/apply',isAuth, isStudent,applyTest);
 
 module.exports = router;

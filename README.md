@@ -67,10 +67,10 @@ donde se agrega al profesor el id de la asignatura con el objeto JSON siguiente:
 ### 7 paso: Agregar niveles escolares al profesor.
 Ruta protegida, solo con acceso para profesores.
 Es importante tener creados los cursos antes, ya que se ocupan para validar la existencia del nivel.
-En el endpoint http://localhost:8000/api/v1/admin/grade/:idProfesor con metodo PUT se pueden crear asignaturas con el objeto JSON siguiente:
+En el endpoint http://localhost:8000/api/v1/admin/schoolyear/:idProfesor con metodo PUT se pueden crear asignaturas con el objeto JSON siguiente:
 ```
 {
-    "grade": 1
+    "schoolYear": 1
 }
 ```
 Los niveles se ocuparan para validar el nivel al que creara pruebas el profesor.
