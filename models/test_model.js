@@ -1,20 +1,12 @@
 const mongoose = require('mongoose');
-const UserModel = require('./user_model');
+const TeacherModel = require('./teacher_model');
 const SubjectModel = require('./subject_model');
 const GradeModel = require('./grade_model');  
 
-const gradeValidator = async (gradeId) => {
-    const resp = await GradeModel.exists({
-        _id : gradeId
-    })
-    return resp;
-}
+
 
 const teacherValidator = async (teacherId) => {
-    const resp = await UserModel.exists({
-        _id : teacherId,
-        role: 'teacher_role'
-    })
+    const resp = await TeacherModel.exists({_id : teacherId})
     return resp;
 }
 
@@ -29,11 +21,7 @@ const TestSchema = new mongoose.Schema({
     grade: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: GradeModel,
-        validate: {
-            validator: gradeValidator,
-            message: 'Curso no existe'
-        }
+        ref: GradeModel
     },
     subject: {
         type: mongoose.Schema.Types.ObjectId,
@@ -44,14 +32,14 @@ const TestSchema = new mongoose.Schema({
             message: 'Asignatura no existe'
         }
     },
-    // created_by: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     required: true,
-    //     validate: {
-    //         validator: teacherValidator,
-    //         message: 'Profesor no existe'
-    //     }
-    // },
+    created_by: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        validate: {
+            validator: teacherValidator,
+            message: 'Profesor no existe'
+        }
+    },
     questions: [
         {
             points: {
