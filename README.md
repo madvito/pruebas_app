@@ -114,3 +114,20 @@ En el endpoint http://localhost:8000/api/v1/test/apply/:idTest con metodo POST s
 }
 ```
 que validará que el alumno sea del curso al que se diseñó la prueba y la guardará con el id de la cuenta de estudiante que esté relacionada al token de Authorization.
+
+## Rutas de ayuda
+
+### Obtener todas las pruebas.
+Ruta protegida, con acceso para profesores.
+
+En el endpoint http://localhost:8000/api/v1/test con metodo GET se obtienen todas las pruebas incluyendo datos del creador, asignatura y curso.
+
+### Obtener una prueba por su Id.
+Ruta protegida, con acceso para estudiantes y profesores.
+
+En el endpoint http://localhost:8000/api/v1/test/:idTest con metodo GET se obtiene la prueba relacionada al id ingresado incluyendo datos del creador, asignatura y curso.
+
+### Obtener las respuestas a una prueba por su Id.
+Ruta protegida, con acceso para estudiantes y profesores.
+
+En el endpoint http://localhost:8000/api/v1/test/applied/:idTest con metodo GET se obtienen todas las respuestas a la prueba relacionada al id ingresado incluyendo datos de la prueba y el usuario que la respondió.

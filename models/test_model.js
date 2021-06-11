@@ -21,7 +21,7 @@ const TestSchema = new mongoose.Schema({
     grade: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: GradeModel
+        ref: 'Grade'
     },
     subject: {
         type: mongoose.Schema.Types.ObjectId,

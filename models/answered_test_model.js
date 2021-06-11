@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const AnsweredTestSchema = new mongoose.Schema({
     test_id:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Test",
+        ref: 'Test',
         required: true
     },
     student_id:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true
     },
     answers:{

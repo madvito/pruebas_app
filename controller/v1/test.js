@@ -177,7 +177,68 @@ const applyTest = async(req,res,next) => {
     }
 }
 
+const getAllTests = async (req, res, next) => {
+    try {
+        const testsDoc = await TestModel.find().populate('subject').populate('grade').populate('created_by');
+        res.status(200).json({
+            data: testsDoc
+        })
+
+    } catch (e) {
+        if(!e.statusCode){
+            e.statusCode = 500;
+        }
+        next(e);
+    }
+}
+
+const getTestById = async (req, res, next) => {
+    try {
+        const {testId} = req.params;
+        const testDoc = await TestModel.findById(testId).populate('subject').populate('grade').populate('created_by');
+
+        if (!testDoc){
+            const err = new Error('Prueba no existe');
+            err.statusCode = 404;
+            throw err;
+        }
+
+        res.status(200).json({
+            data: testDoc
+        })
+    } catch (e) {
+        if(!e.statusCode){
+            e.statusCode = 500;
+        }
+        next(e);
+    }
+}
+
+const getAnsweredTestById = async (req, res, next) => {
+    try {
+        const {testId} = req.params;
+        const answeredTestDoc = await AnsweredTestModel.find({test_id: testId}).populate('student_id').populate('test_id');
+        if (answeredTestDoc.length == 0){
+            const err = new Error('Prueba no existe');
+            err.statusCode = 404;
+            throw err;
+        }
+        console.log(answeredTestDoc);
+        res.status(200).json({
+            data: answeredTestDoc
+        })
+    } catch (e) {
+        if(!e.statusCode){
+            e.statusCode = 500;
+        }
+        next(e);
+    }
+}
+
 module.exports = {
     createTest,
-    applyTest
+    applyTest,
+    getAllTests,
+    getTestById,
+    getAnsweredTestById
 }
